@@ -14,6 +14,8 @@ import styled from 'styled-components';
 // background: #EDF4ED;
 // border: 1px solid gray;
 // `;
+
+// https://styled-components.com/docs/advanced#style-objects
 const BgCol = styled(Col)(
     props => ({
         background: props.background,
