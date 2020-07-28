@@ -8,8 +8,18 @@ import { Menu, Input, Row, Col } from 'antd';
 import { useState, useMemo } from 'react';
 import UserProfile from './UserProfile';
 import LoginForm from './LoginForm';
+import styled from 'styled-components';
 
-
+// const BgCol = styled(Col)`
+// background: #EDF4ED;
+// border: 1px solid gray;
+// `;
+const BgCol = styled(Col)(
+    props => ({
+        background: props.background,
+        border: '1px solid gray',
+    })
+);
 const AppLayout = ({ children }) => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
 
@@ -33,14 +43,15 @@ const AppLayout = ({ children }) => {
             </Menu>
             <Row gutter={8}>
                 {/* https://ant.design/components/grid/, full col value = 24 , xs > sm > md */}
-                <Col xs={24} md={6} style={{ background: '#EDF4ED' }}>{isLoggedIn
-                    ? <UserProfile setIsLoggedIn={setIsLoggedIn} />
-                    : <LoginForm setIsLoggedIn={setIsLoggedIn} />}</Col>
+                <BgCol xs={24} md={6} background='#EDF4ED'>
+                    {isLoggedIn
+                        ? <UserProfile setIsLoggedIn={setIsLoggedIn} />
+                        : <LoginForm setIsLoggedIn={setIsLoggedIn} />}
+                </BgCol>
                 <Col xs={24} md={12}>{children}</Col>
-                <Col xs={24} md={6} style={{ background: '#EDF4ED' }}>
-                    {/* http://www.igloosec.co.kr/BLOG_Tabnabbing%20%EA%B8%B0%EB%B2%95%EC%9D%84%20%ED%86%B5%ED%95%9C%20%EA%B3%84%EC%A0%95%20%ED%83%88%EC%B7%A8?searchItem=&searchWord=&bbsCateId=0&gotoPage=10 */}
+                <BgCol xs={24} md={6} background='#aed9e0'>
                     <a href="https://github.com/objects76" target="_blank" rel="noreferrer noopener">Made by jjkim</a>
-                </Col>
+                </BgCol>
             </Row>
         </div>
     )

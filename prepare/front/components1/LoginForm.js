@@ -3,10 +3,12 @@ import React, { useCallback, useState, useMemo } from 'react';
 import { Input, Button, Alert, message } from 'antd';
 import Form from 'antd/lib/form/Form';
 import Link from 'next/link';
-import styled from 'styled-components'
+import styled from 'styled-components';
 
-const ButtonWrapper = styled.div`
-    margin-top: 15px
+// https://github.com/styled-components/styled-components/issues/2147
+// - Prop `className` did not match. Server:
+const SignupWrapper = styled.div`
+  margin-top: 10px;
 `;
 
 const LoginForm = ({ setIsLoggedIn }) => {
@@ -38,6 +40,8 @@ const LoginForm = ({ setIsLoggedIn }) => {
         borderRadius: '5px',
         margin: '5px',
     }), []);
+
+
     return (<>
         <Form onFinish={onSubmitForm} style={styleFrom}>
             <div>
@@ -48,13 +52,14 @@ const LoginForm = ({ setIsLoggedIn }) => {
                 <label htmlFor="user-password">Password:</label><br />
                 <Input name="user-password" value={password} type="password" onChange={onChangePassword} required />
             </div>
-            <ButtonWrapper>
+            <SignupWrapper>
                 <Button type="primary" htmlType="submit" loading={false}>Login</Button>
                 <Link href='/signup'><a><Button>Signup</Button></a></Link>
-            </ButtonWrapper>
+            </SignupWrapper>
         </Form>
     </>);
 }
+
 
 export default LoginForm;
 

@@ -10,6 +10,7 @@ const ErrorDiv = styled.div`
 color: red
 `;
 
+
 const ERROR_PASSWORD = 0x01;
 const ERROR_TERM = 0x02;
 const Signup = () => {
@@ -69,11 +70,11 @@ const Signup = () => {
                     <div>
                         <label htmlFor="password2">Password check</label><br />
                         <Input name="password2" value={password2} required onChange={onChangePassword2}></Input>
-                        {!!(flags & ERROR_PASSWORD) && <div style={{ color: 'red' }}>Password is not matched!</div>}
+                        {!!(flags & ERROR_PASSWORD) && <ErrorDiv>Password is not matched!</ErrorDiv>}
                     </div>
                     <div>
                         <Checkbox onChange={onChangeTerm}>Agree</Checkbox>
-                        {!!(flags & ERROR_TERM) && <div style={{ color: 'red' }}>You should agree the term!</div>}
+                        {!!(flags & ERROR_TERM) && <ErrorDiv>You should agree the term!</ErrorDiv>}
                     </div>
                     <div style={{ marginTop: 10 }}>
                         <Button type="primary" htmlType="submit">Submit</Button>
