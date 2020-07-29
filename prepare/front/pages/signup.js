@@ -11,11 +11,9 @@ color: red
 `;
 
 
-const ERROR_PASSWORD = 0x01;
-const ERROR_TERM = 0x02;
 const Signup = () => {
 
-    const [flags, setFlags] = useState(0);
+    const [[errors], setErrors] = useState([new Set()]);
 
     const [id, onChangeID] = useInput('');
     const [nickname, onChangeNickname] = useInput('');
@@ -25,22 +23,36 @@ const Signup = () => {
     const onChangePassword2 = useCallback((e) => {
         const v2 = e.target.value;
         setPassword2(v2);
-        let tmp = (v2 === password) ? flags & ~ERROR_PASSWORD : flags | ERROR_PASSWORD;
-        setFlags(tmp);
-        console.log(`flags=${flags}, tmp=${tmp}, password2=${v2}`);
+        if (v2 === password)
+            errors.delete("password");
+        else
+            errors.add("password");
+        setErrors([errors]);
+        console.log(`password2=${v2}, errors=${errors}`);
+
     }, [password]);
 
     const [term, setTerm] = useState(false);
     const onChangeTerm = useCallback((e) => {
         setTerm(e.target.checked);
-        let tmp = (e.target.checked) ? flags & ~ERROR_TERM : flags | ERROR_TERM;
-        setFlags(tmp);
-        console.log(`flags=${flags}, tmp=${tmp}, term=${e.target.value}`);
+        if (e.target.checked)
+            errors.delete('term');
+        else
+            errors.add('term');
+        setErrors([errors]);
+        console.log(`term=${e.target.value}, errors=${errors}`);
     }, []);
 
     const onFormSubmit = useCallback((e) => {
-        setFlags((password2 === password) ? flags & ~ERROR_PASSWORD : flags | ERROR_PASSWORD);
-        setFlags(term ? flags & ~ERROR_TERM : flags | ERROR_TERM);
+        if (password2 === password)
+            errors.delete("password");
+        else
+            errors.add("password");
+        if (term)
+            errors.delete('term');
+        else
+            errors.add('term');
+        setErrors([errors]);
 
         if (flags != 0)
             return;
@@ -64,17 +76,17 @@ const Signup = () => {
                         <Input name="nickname" required onChange={onChangeNickname}></Input>
                     </div>
                     <div>
-                        <label htmlFor="password">Password</label><br />
-                        <Input name="password" required onChange={onChangePassword}></Input>
+                        <label htmlFor="user-password">Password</label><br />
+                        <Input name="user-password" type="password" value={password} required onChange={onChangePassword}></Input>
                     </div>
                     <div>
-                        <label htmlFor="password2">Password check</label><br />
-                        <Input name="password2" value={password2} required onChange={onChangePassword2}></Input>
-                        {!!(flags & ERROR_PASSWORD) && <ErrorDiv>Password is not matched!</ErrorDiv>}
+                        <label htmlFor="user-password2">Password check</label><br />
+                        <Input name="user-password2" type="password" value={password2} required onChange={onChangePassword2}></Input>
+                        {!!(errors.has("password")) && <ErrorDiv>Password is not matched!</ErrorDiv>}
                     </div>
                     <div>
                         <Checkbox onChange={onChangeTerm}>Agree</Checkbox>
-                        {!!(flags & ERROR_TERM) && <ErrorDiv>You should agree the term!</ErrorDiv>}
+                        {!!(errors.has("term")) && <ErrorDiv>You should agree the term!</ErrorDiv>}
                     </div>
                     <div style={{ marginTop: 10 }}>
                         <Button type="primary" htmlType="submit">Submit</Button>

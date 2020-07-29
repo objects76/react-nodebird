@@ -5,15 +5,19 @@ import Form from 'antd/lib/form/Form';
 import Link from 'next/link';
 import styled from 'styled-components';
 
+import { useDispatch } from 'react-redux';
+import { reduxUserAction } from '../reducers/user';
+
 // https://github.com/styled-components/styled-components/issues/2147
 // - Prop `className` did not match. Server:
 const SignupWrapper = styled.div`
   margin-top: 10px;
 `;
 
-const LoginForm = ({ setIsLoggedIn }) => {
+const LoginForm = () => {
     const [id, setId] = useState('');
     const [password, setPassword] = useState('');
+    const dispatch = useDispatch();
 
     const onChangeId = useCallback((evt) => {
         setId(evt.target.value);
@@ -25,7 +29,7 @@ const LoginForm = ({ setIsLoggedIn }) => {
     const onSubmitForm = useCallback((evt) => {
         if (id === 'jjkim' && password === 'jjkim') {
             console.log(id, password);
-            setIsLoggedIn(true);
+            dispatch(reduxUserAction('login', { id, password }));
         }
         else {
             message
@@ -50,12 +54,12 @@ const LoginForm = ({ setIsLoggedIn }) => {
             </div>
             <div>
                 <label htmlFor="user-password">Password:</label><br />
-                <Input name="user-password" value={password} type="password" onChange={onChangePassword} required />
+                <Input name="user-password" value={password} type="password" autoComplete="on" required onChange={onChangePassword} required />
             </div>
-            <SignupWrapper>
+            <div style={{ marginTop: '10px' }}>
                 <Button type="primary" htmlType="submit" loading={false}>Login</Button>
                 <Link href='/signup'><a><Button>Signup</Button></a></Link>
-            </SignupWrapper>
+            </div>
         </Form>
     </>);
 }

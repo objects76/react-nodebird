@@ -13,7 +13,7 @@ const FollowList = ({ header, data }) => {
             header={<div>{header}</div>}
             loadMore={
                 <div style={{ textAlign: 'center', margin: '10px 0' }}>
-                    <Button>더 보기</Button>
+                    <Button>More...</Button>
                 </div>
             }
             bordered

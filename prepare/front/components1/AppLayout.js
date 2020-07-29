@@ -5,10 +5,13 @@ import Link from 'next/link'
 
 // https://ant.design/components/menu/#components-menu-demo-inline
 import { Menu, Input, Row, Col } from 'antd';
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import UserProfile from './UserProfile';
 import LoginForm from './LoginForm';
 import styled from 'styled-components';
+import { MailOutlined, AppstoreOutlined, SettingOutlined } from '@ant-design/icons';
+
+import { useSelector } from 'react-redux';
 
 // const BgCol = styled(Col)`
 // background: #EDF4ED;
@@ -23,21 +26,27 @@ const BgCol = styled(Col)(
     })
 );
 const AppLayout = ({ children }) => {
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const isLoggedIn = useSelector(state => state.user.isLoggedIn);
 
     const searchStyle = useMemo(() => { return { verticalAlign: 'middle' }; }, []);
 
+    const [current, setCurrent] = useState('signup');
+    const handleClick = useCallback((e) => {
+        console.log(e.key);
+        setCurrent(e.key);
+    }, []);
+
     return (
         <div>
-            <Menu mode="horizontal">
-                <Menu.Item key='home'>
+            <Menu onClick={handleClick} selectedKeys={[current]} mode="horizontal">
+                <Menu.Item key='home' icon={<MailOutlined />} >
                     <Link href="/"><a>Nodebird</a></Link>
                 </Menu.Item>
                 <Menu.Item key='profile'>
                     <Link href="/profile"><a>Profile</a></Link>
                 </Menu.Item>
-                <Menu.Item key="mail">
-                    <Input.Search enterButton style={searchStyle} />
+                <Menu.Item key="search">
+                    <Input.Search enterButton style={{ verticalAlign: 'middle' }} />
                 </Menu.Item>
                 <Menu.Item key='signup'>
                     <Link href="/signup"><a>Signup</a></Link>
@@ -45,15 +54,15 @@ const AppLayout = ({ children }) => {
             </Menu>
             <Row gutter={8}>
                 {/* https://ant.design/components/grid/, full col value = 24 , xs > sm > md */}
-                <BgCol xs={24} md={6} background='#EDF4ED'>
+                <Col xs={24} md={6} style={{ background: '#EDF4ED', border: '1px solid gray', }}>
                     {isLoggedIn
-                        ? <UserProfile setIsLoggedIn={setIsLoggedIn} />
-                        : <LoginForm setIsLoggedIn={setIsLoggedIn} />}
-                </BgCol>
+                        ? <UserProfile />
+                        : <LoginForm />}
+                </Col>
                 <Col xs={24} md={12}>{children}</Col>
-                <BgCol xs={24} md={6} background='#aed9e0'>
+                <Col xs={24} md={6} style={{ background: '#aed9e0', border: '1px solid gray', }}>
                     <a href="https://github.com/objects76" target="_blank" rel="noreferrer noopener">Made by jjkim</a>
-                </BgCol>
+                </Col>
             </Row>
         </div>
     )
